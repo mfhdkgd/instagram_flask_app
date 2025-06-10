@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8">
+  <title>صفحه اصلی</title>
+  <style>
+    body { font-family: Tahoma, sans-serif; direction: rtl; padding: 20px; max-width: 600px; margin: auto;}
+    button { padding: 10px 20px; background: #007BFF; color: white; border: none; cursor: pointer; margin-top: 20px;}
+    .flash { padding: 10px; margin-bottom: 10px; }
+    .success { background: #d4edda; color: #155724; }
+    .error { background: #f8d7da; color: #721c24; }
+  </style>
+</head>
+<body>
+  <h2>سلام {{ username }}!</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="post" action="{{ url_for('do_actions') }}">
+    <label>نام پیجی که می‌خواهید عملیات انجام شود:</label>
+    <input name="target_username" placeholder="مثلا iranbetnet" required>
+    <label>تعداد پست‌ها (مثلا 5):</label>
+    <input name="amount" type="number" min="1" max="20" value="5" required>
+    <button type="submit">انجام عملیات لایک و کامنت</button>
+  </form>
+</body>
+</html>
