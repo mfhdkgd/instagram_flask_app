@@ -44,9 +44,14 @@ def login():
             save_session(cl, username)
             return redirect(url_for("home"))
         except TwoFactorRequired as e:
-            # ذخیره مقادیر مورد نیاز برای ورود دو مرحله‌ای
-            session["twofa_identifier"] = e.two_factor_identifier
-            return redirect(url_for("twofa"))
+            identifier = e.last_json.get("two_factor_info", {}).get("two_factor_identifier")
+            if not identifier:
+                flash("خطا در دریافت شناسه تایید دو مرحله‌ای")
+                return redirect(url_for("login"))
+
+     session["twofa_identifier"] = identifier
+     return redirect(url_for("twofa"))
+
         except Exception as e:
             flash(f"Login failed: {str(e)}")
             return redirect(url_for("login"))
